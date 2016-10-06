@@ -1,0 +1,22 @@
+{{# each products }} <!--loop through all the products with an outer each loop want to create a row for each chunk-->
+  <div class="row">
+  {{# each this }} <!--inner each loop inside this i will loop through and create columns the individual product in each row; this is a keyword 
+                  if we have loop each products then we can reference the current element of the loop with this, and this is another array since we have a chunk array with its elements which are arrays too, then we loop through each element-->
+      <div class="col-sm-6 col-md-4"> <!--loop through to create my columns the individual product in each row-->
+      <div class="thumbnail">
+      <img src="{{ this.imagePath }}" alt="..." class="img-responsive"> <!--this keyword is not referring to an array anymore but instead to 
+                                            individual object see the #each this above; the object has an image path as I set up in the schema-->
+      <div class="caption">
+        <h3>{{ this.title }}</h3>
+        <p class="description">{{ this.description }}</p>
+        <div class="clearfix">
+          <div class="price pull-left">${{ this.price }}</div>
+          <a href="#" class="btn btn-success pull-right" role="button">Add to Shopping Cart</a>
+        </div>
+      </div>
+    </div> 
+    </div>        
+  {{/ each}}
+  </div> 
+{{/ each}} <!--close block statement -->
+
