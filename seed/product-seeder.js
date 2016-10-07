@@ -2,7 +2,9 @@ var Product = require('../models/product'); //import my product model; note the 
 
 var mongoose = require('mongoose'); //connect with mongoose inside this file
 
-mongoose.connect('localhost:27017/shopping'); //copy connect object from app.js 
+var mongoUri = process.env.MONGO_URI
+
+mongoose.connect(mongoUri); //copy connect object from app.js 
 
 var products = [
 	new Product({ //create a new product the model I import here; pass the javascript object the actual data I want write into the database

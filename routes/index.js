@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var Product = require('../models/product'); //importing product model from models folder
+var csrf = require('csurf');
 
+var csrfProtection = csrf(); //starting csrf use it as middleware
+router.use(csrfProtection);//apply middleware to the router to save my routes; all routes should be protected by csrf protection
 /* GET home page. */
 router.get('/', function(req, res, next) {
   Product.find(function(err, docs) { //products fetched like db.product.find() gets the exact same data; get rid of var products 
@@ -28,5 +31,12 @@ router.get('/', function(req, res, next) {
   }); //instead we will create a new callback we either get an error or all the documentsl; inside of the callback I will call this render method and pass the documents								
 });	  //in the index.hbs file I can loop through this; if I restart the server and relaod it is much better, now we have 5 products, same as db, since we seeded 5 products									
 											
+router.get('/user/signup', function(req, res, next) {
+  res.render('user/signup', {csrfToken: req.csrfToken()});
+});
+
+router.post('/user/signup', function(req, res, next) {
+  res.redirect('/');
+});
 
 module.exports = router;

@@ -6,12 +6,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars'); //use express handlebars package
 var mongoose = require('mongoose');
+var session = require('express-session');
+var passport = require('passport');
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 
 var app = express();
 
-mongoose.connect('localhost:27017/shopping'); //slash defines db I want to use on the server; connect app to mongodb server; the connect method expects an input, the arguement we pass is the path of our server
+var mongoUri = process.env.MONGO_URI
+
+mongoose.connect(mongoUri); //slash defines db I want to use on the server; connect app to mongodb server; the connect method expects an input, the arguement we pass is the path of our server
 //app.js file is where requests are handled. 
 // view engine setup, register new engine, start handlebars package, pass javascript object to templating engine, default layout to Layouts, will always search for Layouts js, extension name to .hbs 
 app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'})); 
@@ -23,6 +28,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'mysupersecret', resave: false, saveUninitialized: false})); //session initialization
+app.use(flash()); //initialize flash needs session to intialize first
+app.use(passport.initialize());
+app.use(passport.session()); //set it to store the user
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
